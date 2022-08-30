@@ -1,0 +1,330 @@
+<div class="container ">
+  <br>
+  <h5>Mined or Milled Bulk Asbestos, or Bulk Materials Containing Asbestos, including as an Impurity</h5>
+  <div class="row" id="respondentActivityInformation">
+    <div class="col">
+      <form class="ml-2 mr-2" [formGroup]="minedOrMilledOptions">
+        <div class="card">
+          <div class="card-body">
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-6">
+                  <span class="bold">Select all that apply.</span>
+                  <div class="form-check mt-1">
+                    <input class="form-check-input m-1" formControlName="isBulkAsbestos" type="checkbox" id="isBulkAsbestos"/>
+                    <label class="form-check-label mx-1" for="isBulkAsbestos">Bulk Asbestos</label>
+                  </div>
+                  <div class="form-check mt-1">
+                    <input class="form-check-input m-1" (change)="checkAwareStatus()" formControlName="isBulkMaterialsWithAsbestos" type="checkbox" id="isBulkMaterialsWithAsbestos"/>
+                    <label class="form-check-label mx-1" for="isBulkMaterialsWithAsbestos">Bulk Materials Containing Asbestos, including as an impurity</label>
+                  </div>
+                </div>
+
+
+                <div class="col-md-6" *ngIf="getIsBulkAsbestos() || getIsBulkMaterials()">
+                  <span class="bold">Are you aware of the amount of Asbestos in your {{getIsBulkMaterials() && !getIsBulkAsbestos() ? 'Bulk Materials' : 'product'}}?</span>
+                  <div class="mt-1" [hidden]="!getIsBulkAsbestos()">
+                    <input class="form-check-input m-1" aria-labelledby="awareOfAsbestosAmtInProductTrue" formControlName="awareOfAsbestosAmtInProduct" value="true" type="radio" name="awareOfAsbestosAmtInProduct" id="awareOfAsbestosAmtInProductTrue"/>
+                    <label class="form-check-label mx-1" for="awareOfAsbestosAmtInProductTrue">Yes</label>
+                    <input class="form-check-input m-1" [hidden]="!getIsBulkMaterials()" aria-labelledby="awareOfAsbestosAmtInProductFalse" formControlName="awareOfAsbestosAmtInProduct" value="false" type="radio" name="awareOfAsbestosAmtInProduct" id="awareOfAsbestosAmtInProductFalse"/>
+                    <label class="form-check-label mx-1" [hidden]="!getIsBulkMaterials()" for="awareOfAsbestosAmtInProductFalse">No</label>
+                  </div>
+                  <div class="mt-1" [hidden]="!getIsBulkMaterials()">
+                    <input class="form-check-input m-1" aria-labelledby="awareOfBulkMaterialsAmtInProductTrue" formControlName="awareOfBulkMaterialsAmtInProduct" value="true" type="radio" name="awareOfBulkMaterialsAmtInProduct" id="awareOfBulkMaterialsAmtInProductTrue"/>
+                    <label class="form-check-label mx-1" for="awareOfBulkMaterialsAmtInProductTrue">Yes</label>
+                    <input class="form-check-input m-1" aria-labelledby="awareOfBulkMaterialsAmtInProductFalse" formControlName="awareOfBulkMaterialsAmtInProduct" value="false" type="radio" name="awareOfBulkMaterialsAmtInProduct" id="awareOfBulkMaterialsAmtInProductFalse"/>
+                    <label class="form-check-label mx-1" for="awareOfBulkMaterialsAmtInProductFalse">No</label>
+                  </div>
+                </div>
+
+                
+              </div>
+              <div class="row" *ngIf="getIsBulkAsbestos() && minedOrMilledOptions.controls['awareOfAsbestosAmtInProduct'].value === 'true'">
+                <h5 class="bold mt-5">Quantity of Bulk Asbestos by Year</h5>
+                <div class="card borderless">
+                  <div class="card-body">
+                    <span class="my-3">Be as specific as possible. If multiple fibers apply, report separate production volumes in short tons for each type.</span>
+                    <div class="col p-2">
+                      <table aria-label="Bulk Asbestos Listed by Year" class="table-responsive table">
+                        <thead>
+                        <tr>
+                          <th scope="col" class="col-3">Asbestos Type</th>
+                          <th scope="col">Year(s)</th>
+                          <th scope="col">Quantity (short tons)</th>
+                          <th scope="col">Mined or Milled or Both?</th>
+                          <th scope="col">Disposition of Mined or Milled Bulk Asbestos</th>
+                          <th scope="col" class="col-form-label-sm">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody *ngIf="getAsbestosBulkQuantities().length > 0">
+                        <tr *ngFor="let type of getAsbestosBulkQuantities(); let i = index">
+                          <td class="align-top">
+                            <select id="asbestosBulkTypeList" class="form-select mt-2">
+                              <option value="">Select an option...</option>
+                              <option *ngFor="let typeOption of constants">{{typeOption}}</option>
+                            </select>
+                          </td>
+                          <td>
+                            <div class="form-check mb-3">
+                              <input class="form-check-input" (change)="toggleControls(getAsbestosBulkQuantities(), i, 2019)" type="checkbox" id="asbestosYear2019"/>
+                              <label class="form-check-label" for="asbestosYear2019">{{type.reportingQuantityType2019.year}}</label>
+                            </div>
+                            <div class="form-check mb-3">
+                              <input class="form-check-input" (change)="toggleControls(getAsbestosBulkQuantities(), i, 2020)" type="checkbox" id="asbestosYear2020"/>
+                              <label class="form-check-label" for="asbestosYear2020">{{type.reportingQuantityType2020.year}}</label>
+                            </div>
+                            <div class="form-check mb-3">
+                              <input class="form-check-input" (change)="toggleControls(getAsbestosBulkQuantities(), i, 2021)" type="checkbox" id="asbestosYear2021"/>
+                              <label class="form-check-label" for="asbestosYear2021">{{type.reportingQuantityType2021.year}}</label>
+                            </div>
+                            <div class="form-check mb-3">
+                              <input class="form-check-input" (change)="toggleControls(getAsbestosBulkQuantities(), i, 2022)" type="checkbox" id="asbestosYear2022"/>
+                              <label class="form-check-label" for="asbestosYear2022">{{type.reportingQuantityType2022.year}}</label>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="form-check mb-2">
+                              <input class="form-control-sm w-75" [disabled]="!type.reportingQuantityType2019.isChecked" id="asbestosQuantity2019"/>
+                              <label class="form-label" for="asbestosQuantity2019"></label>
+                            </div>
+                            <div class="form-check mb-2">
+                              <input class="form-control-sm w-75" [disabled]="!type.reportingQuantityType2020.isChecked" id="asbestosQuantity2020"/>
+                              <label class="form-label" for="asbestosQuantity2020"></label>
+                            </div>
+                            <div class="form-check mb-2">
+                              <input class="form-control-sm w-75" [disabled]="!type.reportingQuantityType2021.isChecked" id="asbestosQuantity2021"/>
+                              <label class="form-label" for="asbestosQuantity2021"></label>
+                            </div>
+                            <div class="form-check mb-2">
+                              <input class="form-control-sm w-75" [disabled]="!type.reportingQuantityType2022.isChecked" id="asbestosQuantity2022"/>
+                              <label class="form-label" for="asbestosQuantity2022"></label>
+                            </div>
+                          </td>
+                          <td>
+                            <select id="asbestosProcessMethod2019" [disabled]="!type.reportingQuantityType2019.isChecked" class="form-select mb-2">
+                              <option value="">Select an option...</option>
+                              <option *ngFor="let method of constants">{{method}}</option>
+                            </select>
+                            <select id="asbestosProcessMethod2020" [disabled]="!type.reportingQuantityType2020.isChecked" class="form-select mb-2">
+                              <option value="">Select an option...</option>
+                              <option *ngFor="let method of constants">{{method}}</option>
+                            </select>
+                            <select id="asbestosProcessMethod2021" [disabled]="!type.reportingQuantityType2021.isChecked" class="form-select mb-2">
+                              <option value="">Select an option...</option>
+                              <option *ngFor="let method of constants">{{method}}</option>
+                            </select>
+                            <select id="asbestosProcessMethod2022" [disabled]="!type.reportingQuantityType2022.isChecked" class="form-select mb-2">
+                              <option value="">Select an option...</option>
+                              <option *ngFor="let method of constants">{{method}}</option>
+                            </select>
+                          </td>
+                          <td>
+                            <select id="asbestosDisposition2019" [disabled]="!type.reportingQuantityType2019.isChecked" class="form-select mb-2">
+                              <option value="">Select an option...</option>
+                              <option *ngFor="let disposition of constants">{{disposition}}</option>
+                            </select>
+                            <select id="asbestosDisposition2020" [disabled]="!type.reportingQuantityType2020.isChecked" class="form-select mb-2">
+                              <option value="">Select an option...</option>
+                              <option *ngFor="let disposition of constants">{{disposition}}</option>
+                            </select>
+                            <select id="asbestosDisposition2021" [disabled]="!type.reportingQuantityType2021.isChecked" class="form-select mb-1">
+                              <option value="">Select an option...</option>
+                              <option *ngFor="let disposition of constants">{{disposition}}</option>
+                            </select>
+                            <select id="asbestosDisposition2022" [disabled]="!type.reportingQuantityType2022.isChecked" class="form-select mb-1">
+                              <option value="">Select an option...</option>
+                              <option *ngFor="let disposition of constants">{{disposition}}</option>
+                            </select>
+                          </td>
+                          <td>
+                            <button type="button" class="btn btn-link" aria-label="Remove Document" (click)="tableUtils.removeReportingQuantity(getAsbestosBulkQuantities(), i)">
+                              <i class="btn btn-primary btn-sm">Delete</i>
+                            </button>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                      <div class="row mt-3">
+                        <div class="col">
+                          <button class="btn btn-customprimary bold" (click)="addNewAsbestosType()">Add Asbestos Type</button>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="row">
+                <app-employee [isBulkAsbestos]="getIsBulkAsbestos()" [employeeInvolvementOptions]="bulkAsbestosEmployeeInvolvementOptions" *ngIf="(getIsBulkAsbestos()) && (minedOrMilledOptions.controls['awareOfAsbestosAmtInProduct'].dirty)">
+                </app-employee>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="card" *ngIf="getIsBulkMaterials() && minedOrMilledOptions.controls['awareOfBulkMaterialsAmtInProduct'].value === 'true'">
+          <div class="card-body">
+            <h5 class="bold">Quantity of Bulk Materials Containing Asbestos by Year</h5>
+            <div class="card borderless">
+              <div class="card-body">
+                <span class="my-3">Be as specific as possible. If multiple fibers apply, report separate production volumes in short tons for each type.</span>
+                <div class="col p-2">
+                  <table aria-label="Bulk Materials Containing Asbestos listed by Year" class="table-responsive table">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="col-2">Bulk Materials Type</th>
+                        <th scope="col">Year(s)</th>
+                        <th scope="col" class="col-1">Quantity (short tons)</th>
+                        <th scope="col" class="col-1">% Asbestos</th>
+                        <th scope="col" class="col-2">Asbestos Type</th>
+                        <th scope="col">Mined or Milled or Both?</th>
+                        <th scope="col" class="col-3">Disposition of Mined or Milled Bulk Asbestos</th>
+                        <th scope="col" class="col-form-label-sm">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody *ngIf="getBulkMaterialQuantities().length > 0">
+                      <tr *ngFor="let type of getBulkMaterialQuantities(); let i = index">
+                        <td class="align-top">
+                          <select id="bulkMaterialsTypeList" class="form-select mt-2">
+                            <option value="">Select an option...</option>
+                            <option *ngFor="let typeOption of constants">{{typeOption}}</option>
+                          </select>
+                        </td>
+                        <td>
+                          <div class="form-check mb-3">
+                            <input class="form-check-input" (change)="toggleControls(getBulkMaterialQuantities(), i, 2019)" type="checkbox" id="bulkMaterialsYear2019"/>
+                            <label class="form-check-label" for="bulkMaterialsYear2019">{{type.reportingQuantityType2019.year}}</label>
+                          </div>
+                          <div class="form-check mb-3">
+                            <input class="form-check-input" (change)="toggleControls(getBulkMaterialQuantities(), i, 2020)" type="checkbox" id="bulkMaterialsYear2020"/>
+                            <label class="form-check-label" for="bulkMaterialsYear2020">{{type.reportingQuantityType2020.year}}</label>
+                          </div>
+                          <div class="form-check mb-3">
+                            <input class="form-check-input" (change)="toggleControls(getBulkMaterialQuantities(), i, 2021)" type="checkbox" id="bulkMaterialsYear2021"/>
+                            <label class="form-check-label" for="bulkMaterialsYear2021">{{type.reportingQuantityType2021.year}}</label>
+                          </div>
+                          <div class="form-check mb-3">
+                            <input class="form-check-input" (change)="toggleControls(getBulkMaterialQuantities(), i, 2022)" type="checkbox" id="bulkMaterialsYear2022"/>
+                            <label class="form-check-label" for="bulkMaterialsYear2022">{{type.reportingQuantityType2022.year}}</label>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="form-check mb-2">
+                            <input class="form-control-sm w-90" [disabled]="!type.reportingQuantityType2019.isChecked" id="bulkMaterialsQuantity2019"/>
+                            <label class="form-label" for="bulkMaterialsQuantity2019"></label>
+                          </div>
+                          <div class="form-check mb-2">
+                            <input class="form-control-sm w-90" [disabled]="!type.reportingQuantityType2020.isChecked" id="bulkMaterialsQuantity2020"/>
+                            <label class="form-label" for="bulkMaterialsQuantity2020"></label>
+                          </div>
+                          <div class="form-check mb-2">
+                            <input class="form-control-sm w-90" [disabled]="!type.reportingQuantityType2021.isChecked" id="bulkMaterialsQuantity2021"/>
+                            <label class="form-label" for="bulkMaterialsQuantity2021"></label>
+                          </div>
+                          <div class="form-check mb-2">
+                            <input class="form-control-sm w-90" [disabled]="!type.reportingQuantityType2022.isChecked" id="bulkMaterialsQuantity2022"/>
+                            <label class="form-label" for="bulkMaterialsQuantity2022"></label>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="mb-2">
+                            <input class="form-control-sm w-50" [disabled]="!type.reportingQuantityType2019.isChecked" id="bulkMaterialsPercentage2019"/>
+                            <label class="form-label" for="bulkMaterialsPercentage2019"></label>
+                          </div>
+                          <div class="mb-2">
+                            <input class="form-control-sm w-50" [disabled]="!type.reportingQuantityType2020.isChecked" id="bulkMaterialsPercentage2020"/>
+                            <label class="form-label" for="bulkMaterialsPercentage2020"></label>
+                          </div>
+                          <div class="mb-2">
+                            <input class="form-control-sm w-50" [disabled]="!type.reportingQuantityType2021.isChecked" id="bulkMaterialsPercentage2021"/>
+                            <label class="form-label" for="bulkMaterialsPercentage2021"></label>
+                          </div>
+                          <div class="mb-2">
+                            <input class="form-control-sm w-50" [disabled]="!type.reportingQuantityType2022.isChecked" id="bulkMaterialsPercentage2022"/>
+                            <label class="form-label" for="bulkMaterialsPercentage2022"></label>
+                          </div>
+                        </td>
+                        <td>
+                          <select id="bulkMaterialsAsbestosTypeList2019" [disabled]="!type.reportingQuantityType2019.isChecked" class="form-select mb-2">
+                            <option value="">Select an option...</option>
+                            <option *ngFor="let typeOption of constants">{{typeOption}}</option>
+                          </select>
+                          <select id="bulkMaterialsAsbestosTypeList2020" [disabled]="!type.reportingQuantityType2020.isChecked" class="form-select mb-2">
+                            <option value="">Select an option...</option>
+                            <option *ngFor="let typeOption of constants">{{typeOption}}</option>
+                          </select>
+                          <select id="bulkMaterialsAsbestosTypeList2021" [disabled]="!type.reportingQuantityType2021.isChecked" class="form-select mb-2">
+                            <option value="">Select an option...</option>
+                            <option *ngFor="let typeOption of constants">{{typeOption}}</option>
+                          </select>
+                          <select id="bulkMaterialsAsbestosTypeList2022" [disabled]="!type.reportingQuantityType2022.isChecked" class="form-select mb-2">
+                            <option value="">Select an option...</option>
+                            <option *ngFor="let typeOption of constants">{{typeOption}}</option>
+                          </select>
+                        </td>
+                        <td>
+                          <select id="bulkMaterialsProcessMethod2019" [disabled]="!type.reportingQuantityType2019.isChecked" class="form-select mb-2">
+                            <option value="">Select an option...</option>
+                            <option *ngFor="let method of constants">{{method}}</option>
+                          </select>
+                          <select id="bulkMaterialsProcessMethod2020" [disabled]="!type.reportingQuantityType2020.isChecked" class="form-select mb-2">
+                            <option value="">Select an option...</option>
+                            <option *ngFor="let method of constants">{{method}}</option>
+                          </select>
+                          <select id="bulkMaterialsProcessMethod2021" [disabled]="!type.reportingQuantityType2021.isChecked" class="form-select mb-2">
+                            <option value="">Select an option...</option>
+                            <option *ngFor="let method of constants">{{method}}</option>
+                          </select>
+                          <select id="bulkMaterialsProcessMethod2022" [disabled]="!type.reportingQuantityType2022.isChecked" class="form-select mb-2">
+                            <option value="">Select an option...</option>
+                            <option *ngFor="let method of constants">{{method}}</option>
+                          </select>
+                        </td>
+                        <td>
+                          <select id="bulkMaterialsDisposition2019" [disabled]="!type.reportingQuantityType2019.isChecked" class="form-select mb-2">
+                            <option value="">Select an option...</option>
+                            <option *ngFor="let disposition of constants">{{disposition}}</option>
+                          </select>
+                          <select id="bulkMaterialsDisposition2020" [disabled]="!type.reportingQuantityType2020.isChecked" class="form-select mb-2">
+                            <option value="">Select an option...</option>
+                            <option *ngFor="let disposition of constants">{{disposition}}</option>
+                          </select>
+                          <select id="bulkMaterialsDisposition2021" [disabled]="!type.reportingQuantityType2021.isChecked" class="form-select mb-2">
+                            <option value="">Select an option...</option>
+                            <option *ngFor="let disposition of constants">{{disposition}}</option>
+                          </select>
+                          <select id="bulkMaterialsDisposition2022" [disabled]="!type.reportingQuantityType2022.isChecked" class="form-select mb-2">
+                            <option value="">Select an option...</option>
+                            <option *ngFor="let disposition of constants">{{disposition}}</option>
+                          </select>
+                        </td>
+                        <td>
+                          <button type="button" class="btn btn-link" aria-label="Remove Document" (click)="tableUtils.removeReportingQuantity(getBulkMaterialQuantities(), i)">
+                            <i class="btn btn-primary btn-sm">Delete</i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="row mt-3">
+                    <div class="col">
+                      <button class="btn btn-customprimary bold" (click)="addNewBulkMaterials()">Add Bulk Materials</button>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

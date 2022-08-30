@@ -1,0 +1,89 @@
+<form [formGroup]="employeeInvolvementOptions">
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="m-1">
+            <label class="form-check-label bold" for="numberOfMiningEmployees-{{isBulkAsbestos ? 'BulkAsbestos' : 'BulkMaterials'}}">Number of Employees Involved with
+              Mining</label>
+            <select id="numberOfMiningEmployees-{{isBulkAsbestos ? 'BulkAsbestos' : 'BulkMaterials'}}" formControlName="numberOfMiningEmployees" class="form-select">
+              <option value="">Select an option...</option>
+            </select>
+          </div>
+          <div class="m-1">
+            <span class="bold">Is Personal Protective Equipment (PPE) Used?</span>
+            <div class="mt-1">
+              <input class="form-check-input m-1" formControlName="isPPEMiningUsed" value="true" type="radio"
+                     name="isPPEMiningUsed" id="isPPEMiningUsedTrue-{{isBulkAsbestos ? 'BulkAsbestos' : 'BulkMaterials'}}"/>
+              <label class="form-check-label m-1" for="isPPEMiningUsedTrue-{{isBulkAsbestos ? 'BulkAsbestos' : 'BulkMaterials'}}">Yes</label>
+              <input class="form-check-input m-1" formControlName="isPPEMiningUsed" value="false" type="radio"
+                     name="isPPEMiningUsed" id="isPPEMiningUsedFalse-{{isBulkAsbestos ? 'BulkAsbestos' : 'BulkMaterials'}}"/>
+              <label class="form-check-label m-1" for="isPPEMiningUsedFalse-{{isBulkAsbestos ? 'BulkAsbestos' : 'BulkMaterials'}}">No</label>
+            </div>
+          </div>
+          <div class="m-1">
+            <label for="typeOfMiningPPEUsed-{{isBulkAsbestos ? 'BulkAsbestos' : 'BulkMaterials'}}" class="bold">What Type of PPE is used?</label>
+            <div>
+              <input class="form-control w-25" formControlName="typeOfMiningPPEUsed" type="text" name="typeOfPPEUsed"
+                     id="typeOfMiningPPEUsed-{{isBulkAsbestos ? 'BulkAsbestos' : 'BulkMaterials'}}"/>
+            </div>
+          </div>
+          <div class="m-1">
+            <label class="form-check-label bold" for="numberOfMillingEmployees-{{isBulkAsbestos ? 'BulkAsbestos' : 'BulkMaterials'}}">Number of Employees Involved with
+              Milling</label>
+            <select id="numberOfMillingEmployees-{{isBulkAsbestos ? 'BulkAsbestos' : 'BulkMaterials'}}" formControlName="numberOfMillingEmployees" class="form-select">
+              <option value="">Select an option...</option>
+            </select>
+          </div>
+          <div class="m-1">
+            <label for="typeOfMillingPPEUsed-{{isBulkAsbestos ? 'BulkAsbestos' : 'BulkMaterials'}}" class="bold">What Type of PPE is used?</label>
+            <div>
+              <input class="form-control w-25" formControlName="typeOfMillingPPEUsed" type="text"
+                     name="typeOfMillingPPEUsed" id="typeOfMillingPPEUsed-{{isBulkAsbestos ? 'BulkAsbestos' : 'BulkMaterials'}}"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-10">
+          <span class="bold m-1">Submit workplace exposure measurement data (e.g., monitoring) as an attachment.</span>
+          <br>
+          <div class="card borderless">
+            <div class="card-body">
+              <span class="bold">Document Upload</span>
+              <table aria-label="Mining and Milling Documents"
+                     class="table table-responsive">
+                <thead>
+                <tr>
+                  <th scope="col">File Name</th>
+                  <th scope="col">Document Type</th>
+                  <th scope="col">CBI</th>
+                  <th scope="col" class="col-sm-1">Action</th>
+                </tr>
+                </thead>
+                <tbody *ngIf="getAttachedDocumentsToUpload().length > 0">
+                <tr *ngFor="let document of getAttachedDocumentsToUpload(); let i = index">
+                  <td>{{document.fileName}}</td>
+                  <td>{{document.documentType}}</td>
+                  <td>{{document.isCBI}}</td>
+                  <td>
+                    <button type="button" class="btn btn-link" aria-label="Remove Document"
+                            (click)="tableUtils.removeDocument(getAttachedDocumentsToUpload(), i)">
+                            <i class="btn btn-primary btn-sm">Delete</i>
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+              <div class="row mt-3">
+                <div class="col">
+                  <button class="btn btn-customprimary bold" (click)="tableUtils.attachDocument(getAttachedDocumentsToUpload())">
+                    Attach Document
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</form>
